@@ -1,0 +1,24 @@
+---
+
+- name: Create Infrastructure
+  cloudformation:
+    stack_name: "{{ stack_name }}"
+    state: "present"
+    region: "{{ region }}"
+    template: "../roles/cloudformation-infra/files/infrastructure.template"
+    template_parameters:
+      Region: "{{ region }}"
+      Route53HostedZone: "{{ route53_hosted_zone }}"
+      VpcCidrBlock: "{{ cidr_block }}"
+      VpcName: "{{ vpc_prefix }}"
+      SubnetCidrBlocks: "{{ subnet_blocks }}"
+      KeyName: "{{ keypair }}"
+      AmiId: "{{ ami }}"
+      BastionInstanceType: "{{ bastion_instance_type }}"
+      BastionUserData: "{{ lookup('file', 'user_data_bastion.yaml') | b64encode }}"
+      AppServersInstanceType: "{{ appservers_instance_type }}"
+      AppServersDataVolSize: "{{ appservers_data_vol_size }}"
+      AppServersUserData: "{{ lookup('file', 'user_data_appservers.yaml') | b64encode }}"
+    tags:
+      MoodleStack: "{{ stack_name }}"
+  when: create_vpc == "yes"

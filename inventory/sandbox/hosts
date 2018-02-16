@@ -1,0 +1,7 @@
+[app_servers]
+app-srv-01	ansible_user=ahmed
+app-srv-02	ansible_user=ahmed
+app-srv-03	ansible_user=ahmed
+
+[db_servers]
+db-srv-01	ansible_user=ahmed

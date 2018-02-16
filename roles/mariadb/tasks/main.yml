@@ -1,0 +1,28 @@
+---
+# tasks file for mariadb
+
+- block:
+  - name: Create data partition
+    parted: device={{ data_disk }} number=1 state=present
+    register: parition
+
+  - name: Create data filesystem
+    filesystem: dev={{ data_disk }}1 fstype=xfs opts="-L MARIADB"
+    register: filesystem
+
+  - name: Mount new filesystem
+    mount: path=/var/lib/mysql state=mounted src="LABEL=MARIADB" fstype=xfs
+
+  tags: [ mariadb, patition ]
+
+- block:
+  - name: Add MariaDB repository
+    copy: src=MariaDB.repo dest=/etc/yum.repos.d/MariaDB.repo owner=root group=root mode=0644
+
+  - name: Install MariaDB Packages
+    yum: name={{ item }}
+    with_items:
+      - MariaDB-server
+      - MariaDB-client
+
+  tags: [ mariadb ]

@@ -1,0 +1,22 @@
+---
+
+- name: Provision the infrastructure on AWS
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  become: no
+  vars_files:
+  - vars/main.yaml
+  vars:
+    vpc_subnet_azs: "{{ lookup('ec2_zones_by_region', region) }}"
+  roles:
+    # Upload ssh-key
+    - role: ssh-key
+      when: create_key == "yes"
+
+    # Get current cloudformation stack if exists
+    - role: cloudformation-facts
+      when: create_vpc == "no"
+
+    # Create VPC and subnets in multiple AZ
+    - cloudformation-infra

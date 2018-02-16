@@ -1,0 +1,43 @@
+---
+# tasks file for php-fpm
+
+
+- name: Install required repositories
+  yum: name=centos-release-scl state=present
+
+- name: Install php-fpm Packages
+  yum: name={{ item }}
+  with_items:
+    - rh-php70-php.x86_64
+    - rh-php70-php-fpm.x86_64
+    - rh-php70-php-xml.x86_64
+    - rh-php70-php-intl.x86_64
+    - rh-php70-php-pear.noarch
+    - rh-php70-php-common.x86_64
+    - rh-php70-php-mbstring.x86_64
+    - rh-php70-php-process.x86_64
+    - rh-php70-php-soap.x86_64
+    - rh-php70-php-xmlrpc.x86_64
+    - rh-php70-php-mysqlnd.x86_64
+    - rh-php70-php-gd.x86_64
+    - rh-php70-php-opcache.x86_64
+    - sclo-php70-php-pecl-memcached
+    - sclo-php70-php-pecl-redis.x86_64
+    - sclo-php70-php-pecl-apcu-5.1.8-1.el7.x86_64
+
+- name: Install configuration files
+  copy: src={{ item.file }} dest={{ item.path }} owner=root group=root mode=0644
+  with_items:
+    - { file: 'php.ini', path: '/etc/opt/rh/rh-php70/php.ini' }
+    - { file: 'www.conf', path: '/etc/opt/rh/rh-php70/php-fpm.d/www.conf' }
+    - { file: '10-opcache.ini', path: '/etc/opt/rh/rh-php70/php.d/10-opcache.ini' }
+
+- name: Change ownership of PHP
+  file: path={{ item }} group=nginx state=directory
+  with_items:
+    - /var/opt/rh/rh-php70/lib/php/opcache
+    - /var/opt/rh/rh-php70/lib/php/session
+    - /var/opt/rh/rh-php70/lib/php/wsdlcache
+
+- name: Enable and start PHP-FPM service
+  systemd: name=rh-php70-php-fpm.service state=started enabled=yes

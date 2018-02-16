@@ -1,0 +1,14 @@
+---
+# tasks file for galera
+
+- name: Install galera cluser configuration files
+  template: src={{ item.file }} dest={{ item.path }} owner=root group=root mode=0644
+  with_items:
+    - { file: 'server.cnf', path: '/etc/my.cnf.d/server.cnf' }
+
+- name: Initialize Galera cluster on first database node
+  shell: /usr/bin/galera_new_cluster
+  when: inventory_hostname in groups['db_servers'][0]
+
+- name: Enable Galera on other nodes
+  systemd: name=mariadb.service enabled=yes state=started

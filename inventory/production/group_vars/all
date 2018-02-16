@@ -1,0 +1,10 @@
+---
+
+use_galera: 0
+use_mariadb: 0
+
+use_gluster: 1
+use_maxscale: 0
+local_memcached: 0
+
+data_disk: /dev/xvdb

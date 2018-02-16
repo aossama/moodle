@@ -1,0 +1,8 @@
+---
+# defaults file for gluster
+
+bricks: /data
+brick1: "{{ bricks }}/brick1"
+brick1_fs_label: MOODLE
+
+gluster_volume_name: moodle

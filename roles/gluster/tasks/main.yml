@@ -1,0 +1,63 @@
+---
+# tasks file for glusterfs
+
+- block:
+
+  - name: Install required repositories
+    yum: name=centos-release-gluster312 state=present
+
+  - name: Install GlusterFS Server packages
+    yum: name=glusterfs-server state=present
+
+  - name: Ensure Glusterd service starts on boot
+    systemd: name=glusterd state=started enabled=yes
+
+  tags: [ gluster, service ]
+
+- name: Touch base on data_disk
+  stat: path={{ data_disk }}1
+  register: stat_data_disk
+  tags: [ gluster, partition ]
+
+- block:
+  - name: Create data partition
+    parted: device={{ data_disk }} number=1 state=present
+    register: partition
+
+  - name: Create data filesystem
+    filesystem: dev={{ data_disk }}1 fstype=xfs opts="-L {{ brick1_fs_label }}"
+    register: filesystem
+
+  - name: Create brick directory
+    file: path={{ brick1 }} state=directory owner=root group=root mode=0755
+
+  - name: Mount new filesystem
+    mount: path={{ bricks }} state=mounted src="LABEL={{ brick1_fs_label }}" fstype=xfs
+
+  when: stat_data_disk.stat.exists == false
+  tags: [ gluster, partition ]
+
+- block:
+  - name: Configure glusterfs peers
+    shell: gluster peer probe {{ item }}
+    register: glusterfs_peer_probe
+    changed_when: "'already in peer list' not in glusterfs_peer_probe.stdout"
+    delegate_to: "{{ groups['app_servers'][0] }}"
+    run_once: True
+    with_items: "{{ groups['app_servers'] }}"
+    when: >
+      item != groups['app_servers'][0]
+
+  - name: Create glusterfs volume
+    gluster_volume: name={{ gluster_volume_name }} state=present host={{ hostvars[0] }} cluster={{ groups.app_servers }} bricks={{ brick1 }} replicas=2
+    delegate_to: "{{ groups['app_servers'][0] }}"
+    run_once: true
+
+  - name: Create moodle directory
+    file: path=/srv/moodle state=directory owner=root group=root mode=0755
+
+  - name: Mount glusterfs volume
+    mount: src=localhost:/{{ gluster_volume_name }} path=/srv/moodle fstype=glusterfs opts="defaults,_netdev" state=mounted
+
+  when: filesystem.changed == true
+  tags: [ gluster, volume ]

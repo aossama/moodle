@@ -1,0 +1,7 @@
+---
+
+- name: Moodle bootstrapping
+  hosts: app_servers
+  become: yes
+  roles:
+    - role: moodle

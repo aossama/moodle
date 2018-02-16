@@ -1,0 +1,11 @@
+---
+
+use_galera: 0
+use_mariadb: 0
+use_mysql: 1
+
+use_gluster: 0
+use_maxscale: 0
+local_memcached: 0
+
+mysql_root_password: qwe123edc

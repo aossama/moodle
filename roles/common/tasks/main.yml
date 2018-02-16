@@ -1,0 +1,5 @@
+---
+# tasks file for common
+
+- name: Create garbage/ directory
+  file: path=/root/garbage state=directory

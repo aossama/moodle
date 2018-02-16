@@ -1,0 +1,11 @@
+---
+
+# AWS instance specific default configuration
+bastion_instance_type: t2.micro
+appservers_instance_type: m4.large
+appservers_data_vol_size: "50"
+vpc_prefix: "{{ stack_name }}-vpc"
+public_subnet_prefix: moodle-public-Subnet
+private_subnet_prefix: moodle-private-Subnet
+cidr_block: 10.20.0.0/16
+subnet_blocks: 10.20.1.0/24,10.20.2.0/24,10.20.3.0/24,10.20.4.0/24,10.20.5.0/24,10.20.6.0/24

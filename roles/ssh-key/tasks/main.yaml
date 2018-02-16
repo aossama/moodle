@@ -1,0 +1,8 @@
+---
+
+- name: EC2 SSH Key
+  ec2_key:
+    name: "{{ keypair }}"
+    region: "{{ region }}"
+    key_material: "{{ item }}"
+  with_file: "{{ key_path }}"

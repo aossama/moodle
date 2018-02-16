@@ -1,0 +1,5 @@
+[app_servers]
+10.10.110.80        ansible_user=centos
+10.10.120.24        ansible_user=centos
+
+[db_servers]

@@ -1,0 +1,10 @@
+---
+
+- name: Database bootstrapping
+  hosts: db_servers
+  become: yes
+  roles:
+    - { role: mysql, when: use_mysql is defined and use_mysql == 1 }
+    - { role: mariadb, when: use_mariadb is defined and use_mariadb == 1 }
+    - { role: galera, when: use_galera is defined and use_galera == 1 }
+    #- { role: maxscale, when: use_maxscale is defined and use_maxscale == 1 }

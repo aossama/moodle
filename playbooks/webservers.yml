@@ -1,0 +1,10 @@
+---
+
+- name: Bootstrap application servers
+  hosts: app_servers
+  become: yes
+  roles:
+    - { role: gluster, when: use_gluster is defined and use_gluster == 1 }
+    - nginx
+    - php-fpm
+    - { role: memcached, when: local_memcached is defined and local_memcached == 1 }

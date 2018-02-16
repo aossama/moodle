@@ -1,0 +1,11 @@
+---
+# tasks file for memcached
+
+- name: Install memcached
+  yum: name=memcached state=present
+
+- name: Install memcache configuration files
+  copy: src=memcached dest=/etc/sysconfig/memcached owner=root group=root mode=0644
+
+- name: Enable and start memcached service
+  systemd: name=memcached enabled=yes state=started

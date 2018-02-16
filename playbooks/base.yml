@@ -1,0 +1,16 @@
+---
+
+- name: Provision infrastructure
+  import_playbook: infrastructure.yml
+
+- name: Shared tasks accross all servers
+  import_playbook: common.yml
+
+- name: Boostrap application servers
+  import_playbook: webservers.yml
+
+- name: Bootstrap database servers
+  import_playbook: database.yml
+
+- name: Deploy prestine moodle instances
+  import_playbook: moodle.yml
