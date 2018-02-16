@@ -443,18 +443,6 @@
       "Value" : { "Ref" : "VPC" },
       "Description" : "VPC that was created"
     },
-    "PrivateSubnet1" : {
-      "Value" : { "Ref" : "PrivateSubnet1" },
-      "Description" : "Private Subnet 1"
-    },
-    "PrivateSubnet2" : {
-      "Value" : { "Ref" : "PrivateSubnet2" },
-      "Description" : "Private Subnet 2"
-    },
-    "PrivateSubnet3" : {
-      "Value" : { "Ref" : "PrivateSubnet3" },
-      "Description" : "Private Subnet 3"
-    },
     "BastionIP" : {
       "Value" : { "Ref" : "Bastion" },
       "Description" : "Bastion Server IP"
