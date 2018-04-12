@@ -1,0 +1,5 @@
+[app_servers]
+moodle-prod-01        ansible_user=ec2-user
+moodle-prod-02        ansible_user=ec2-user
+
+[db_servers]

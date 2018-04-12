@@ -1,7 +1,7 @@
 ---
 
-- name: Provision infrastructure
-  import_playbook: infrastructure.yml
+#- name: Provision infrastructure
+#  import_playbook: infrastructure.yml
 
 - name: Shared tasks accross all servers
   import_playbook: common.yml

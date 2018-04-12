@@ -7,7 +7,7 @@
 
 - name: Download Moodle archive
   get_url: dest=/tmp/ url=https://download.moodle.org/download.php/direct/stable33/moodle-3.3.4.tgz
-  when: moodle_path.stat.isfile is defined and moodle_path.stat.isfile
+  when: (moodle_path.stat.exists == false)
 
 - name: Create Moodle base directory
   file: path=/srv/moodle owner=nginx group=nginx state=directory
